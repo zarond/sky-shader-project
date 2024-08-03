@@ -409,11 +409,11 @@ Shader "Skybox/Procedural+Raymarch" {
 					//return tex3D(_3DTex, V);
 					//return tex2D(_Noise1, V.xz/2000);
 					V.zx += 10 * _Time[3];
-					if (cheap) return max(tex3D(_3DTex, V / _Tiling1) - 0.5*0.2 - _cov, 0) / (1 - _cov);
-					return max(tex3D(_3DTex, V / _Tiling1) - 0.5*tex3D(_3DTex, V / _Tiling2) - _cov, 0) / (1 - _cov);// *(0.5 + tex3D(_3DTex, V / 2000));
+					//if (cheap) return max(tex3D(_3DTex, V / _Tiling1) - 0.5*0.2 - _cov, 0) / (1 - _cov);
+					//return max(tex3D(_3DTex, V / _Tiling1) - 0.5*tex3D(_3DTex, V / _Tiling2) - _cov, 0) / (1 - _cov);// *(0.5 + tex3D(_3DTex, V / 2000));
 
 					//float d = max(tex2D(_Noise1, (V.xz + 3 * _Time[3]) / _Tiling1) - _cov, 0) / (1 - _cov);
-					float d = max(tex3D(_3DTex, V / _Tiling1) - 0.5*tex3D(_3DTex, V / _Tiling2) - _cov, 0) / (1 - _cov);
+					float d = max(tex3Dlod(_3DTex, float4(V / _Tiling1, 0)) - 0.5 * tex3Dlod(_3DTex, float4(V / _Tiling2,0)) - _cov, 0) / (1 - _cov);
 					//d *= 2 * (V.y - _Low)*(_High - V.y) / sqr(_High - _Low);
 					return d;
 

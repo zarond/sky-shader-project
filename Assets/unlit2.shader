@@ -60,7 +60,8 @@ Shader "Unlit/unlit2"
 		float4 _ExtinctionColor;
 
 		inline float sample_density(float3 V) {
-			return tex3D(_3DTex, V);
+			//return tex3D(_3DTex, V);
+			return tex3Dlod(_3DTex, float4(V,0));
 		}
 
 		inline bool boxtest(float3 V) {
@@ -80,12 +81,16 @@ Shader "Unlit/unlit2"
 		}
 
 		inline float rand1(float3 myVector) {
-			return tex2D(_NoiseDithering, _Time[3] + (myVector + 0.5) * _NoiseDithering_TexelSize.xy).r;
+			//return tex2D(_NoiseDithering, _Time[3] + (myVector + 0.5) * _NoiseDithering_TexelSize.xy).r;
+			float2 cord = _Time[3] + (myVector + 0.5) * _NoiseDithering_TexelSize.xy;
+			return tex2Dlod(_NoiseDithering, float4(cord,0,0)).r;
 		}
 
 		inline float rand2(float3 myVector) {
 			float2 interleavedPos = (fmod(floor(myVector.xy), 4.0));
-			return tex2D(_NoiseDithering, interleavedPos / 4.0 + float2(0.5 / 4.0, 0.5 / 4.0)).w;
+			//return tex2D(_NoiseDithering, interleavedPos / 4.0 + float2(0.5 / 4.0, 0.5 / 4.0)).w;
+			float2 cord = interleavedPos / 4.0 + float2(0.5 / 4.0, 0.5 / 4.0);
+			return tex2Dlod(_NoiseDithering, float4(cord,0,0)).w;
 		}
 
 		inline float HenyeyGreenstein(float cos_angle,float eccentricity) {

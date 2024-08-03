@@ -63,7 +63,8 @@
 			//int N,Nsh;
 
 			inline float sample_density(float3 V){
-				return tex3D(_3DTex, V);
+				//return tex3D(_3DTex, V);
+				return tex3Dlod(_3DTex, float4(V, 0));
 				//return 1;
 			}
 

@@ -169,7 +169,7 @@
 	Vec += rayDirection * rand1(float3(i.uv, 1)) * Jitter;
 #endif
 
-	//[loop]
+	[loop]
 	for (int j = 0; j<N; ++j) {
 		V = _WorldSpaceCameraPos + Vec;
 		if ((cursample = sample_density(V))>0.001)
@@ -181,7 +181,8 @@
 			float4 cascadeWeights = GetCascadeWeights_SplitSpheres(_WorldSpaceCameraPos + Vec);
 			bool inside = dot(cascadeWeights, float4(1, 1, 1, 1)) < 4;
 			float4 samplePos = GetCascadeShadowCoord(float4(_WorldSpaceCameraPos + Vec, 1), cascadeWeights);
-			float atten = tex2D(m_ShadowmapCopy, samplePos.xyz);
+			//float atten = tex2D(m_ShadowmapCopy, samplePos.xyz);
+            float atten = tex2Dlod(m_ShadowmapCopy, float4(samplePos.xyz,0));
 #endif
 
 			for (int k = 0; k < Nsh; ++k) {
